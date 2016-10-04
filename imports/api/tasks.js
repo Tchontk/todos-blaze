@@ -35,9 +35,11 @@ if (Meteor.isServer) {
 Meteor.methods({
   'tasks.insert' (text) {
     check(text, String);
+
     if (!this.userId) {
       throw new Meteor.error("identification manquante")
     }
+
     Tasks.insert({
       text,
       createdAt: new Date(),
@@ -55,6 +57,21 @@ Meteor.methods({
     Tasks.update(taskId, {
       $set: {
         checked: setChecked
+      },
+    });
+  },
+  'tasks.setPrivate' (taskId, setToPrivate) {
+    check(taskId, String);
+    check(setToPrivate, Boolean);
+
+    const task = Tasks.findOne(taskId);
+    if (task.owner !== this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    Tasks.update(taskId, {
+      $set: {
+        private: setToPrivate
       },
     });
   }
