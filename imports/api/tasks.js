@@ -15,6 +15,19 @@ import {
 // le nom de l'export est "Tasks"
 export const Tasks = new Mongo.Collection('tasks');
 
+
+/**
+ * Suppression du package autopublish
+ * Il est obligatoire de spécifier les données à publier
+ * Publication des Tasks
+ */
+if (Meteor.isServer) {
+  Meteor.publish('tasks', function tasksPublication() {
+    return Tasks.find();
+  });
+}
+
+
 /**
  * En supprimant le package insecure
  * Il devient obligatoire de définir des méthodes pour les modifications des données

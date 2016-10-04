@@ -23,9 +23,11 @@ import './body.html';
 
 /**
  * Nous attachons le tracker au template body
+ * Nous nous abonnons à la publication tasks
  */
 Template.body.onCreated(function bodyOnCreated() {
   this.state = new ReactiveDict();
+  Meteor.subscribe('tasks');
 })
 
 Template.body.helpers({
